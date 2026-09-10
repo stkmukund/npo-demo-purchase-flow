@@ -1,245 +1,502 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NPO Assessment — Demo Purchase Flow</title>
-<style>
-  :root {
-    --bg: #f5f7fb;
-    --card: #ffffff;
-    --text: #172033;
-    --muted: #667085;
-    --border: #e4e7ec;
-    --primary: #5b4bdb;
-    --primary-dark: #4939c5;
-    --success: #087443;
-    --success-bg: #ecfdf3;
-    --danger: #b42318;
-    --shadow: 0 18px 50px rgba(16, 24, 40, .10);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-  }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 42px 20px 70px; }
-  .brand { font-weight: 800; letter-spacing: -.02em; font-size: 18px; }
-  .hero { margin: 45px 0 28px; }
-  .eyebrow {
-    display: inline-block; padding: 7px 11px; border-radius: 999px;
-    background: #eeebff; color: var(--primary); font-size: 12px; font-weight: 800;
-    text-transform: uppercase; letter-spacing: .08em;
-  }
-  h1 { font-size: clamp(34px, 6vw, 58px); line-height: 1.02; margin: 15px 0; letter-spacing: -.045em; }
-  .hero p { max-width: 680px; color: var(--muted); font-size: 18px; line-height: 1.6; }
-  .grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 24px; align-items: start; }
-  .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 20px;
-    box-shadow: var(--shadow); padding: 28px;
-  }
-  .product-title { font-size: 25px; font-weight: 800; margin: 0 0 8px; }
-  .price { font-size: 34px; font-weight: 850; margin: 18px 0; }
-  .muted { color: var(--muted); }
-  ul { padding-left: 20px; color: #475467; line-height: 1.8; }
-  button, .button {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; min-height: 52px; border: 0; border-radius: 12px;
-    background: var(--primary); color: white; font-weight: 800; font-size: 15px;
-    cursor: pointer; text-decoration: none; transition: .15s ease;
-  }
-  button:hover, .button:hover { background: var(--primary-dark); transform: translateY(-1px); }
-  button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
-  .steps { display: grid; gap: 12px; }
-  .step {
-    display: flex; gap: 13px; padding: 14px; border: 1px solid var(--border);
-    border-radius: 13px; background: #fafbff;
-  }
-  .num {
-    width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%;
-    display: grid; place-items: center; background: #eeebff; color: var(--primary); font-weight: 800;
-  }
-  .status {
-    display: none; margin-top: 18px; padding: 16px; border-radius: 12px;
-    background: var(--success-bg); color: var(--success); border: 1px solid #abefc6;
-  }
-  .status.show { display: block; }
-  .confirmation { display: none; }
-  .confirmation.show { display: block; }
-  .purchase.show { display: none; }
-  .receipt {
-    background: #f8f9fc; border: 1px dashed #cfd4dc; border-radius: 14px;
-    padding: 18px; margin: 20px 0;
-  }
-  .row { display: flex; justify-content: space-between; gap: 15px; padding: 8px 0; }
-  .row span:last-child { font-weight: 750; text-align: right; }
-  .code {
-    display: inline-block; margin-top: 4px; padding: 9px 12px; border-radius: 8px;
-    background: #101828; color: white; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing: .08em;
-  }
-  .config {
-    margin-top: 24px; background: #fff; border: 1px solid var(--border);
-    border-radius: 16px; padding: 20px;
-  }
-  .config label { display: block; font-weight: 750; font-size: 13px; margin-bottom: 8px; }
-  .config input {
-    width: 100%; padding: 12px 13px; border: 1px solid #d0d5dd; border-radius: 10px;
-    font: inherit;
-  }
-  .hint { font-size: 12px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
-  footer { margin-top: 28px; color: var(--muted); font-size: 12px; text-align: center; }
-  @media (max-width: 760px) {
-    .grid { grid-template-columns: 1fr; }
-    .wrap { padding-top: 25px; }
-  }
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="brand">NPO Assessment • Demo Purchase</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NPO Assessment — Demo Purchase Flow</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #172033;
+        --muted: #667085;
+        --border: #e4e7ec;
+        --primary: #5b4bdb;
+        --primary-dark: #4939c5;
+        --success: #087443;
+        --success-bg: #ecfdf3;
+        --danger: #b42318;
+        --shadow: 0 18px 50px rgba(16, 24, 40, 0.1);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 42px 20px 70px;
+      }
+      .brand {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-size: 18px;
+      }
+      .hero {
+        margin: 45px 0 28px;
+      }
+      .eyebrow {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: #eeebff;
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      h1 {
+        font-size: clamp(34px, 6vw, 58px);
+        line-height: 1.02;
+        margin: 15px 0;
+        letter-spacing: -0.045em;
+      }
+      .hero p {
+        max-width: 680px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        padding: 28px;
+      }
+      .product-title {
+        font-size: 25px;
+        font-weight: 800;
+        margin: 0 0 8px;
+      }
+      .price {
+        font-size: 34px;
+        font-weight: 850;
+        margin: 18px 0;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      ul {
+        padding-left: 20px;
+        color: #475467;
+        line-height: 1.8;
+      }
+      button,
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 52px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: 0.15s ease;
+      }
+      button:hover,
+      .button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+      button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .steps {
+        display: grid;
+        gap: 12px;
+      }
+      .step {
+        display: flex;
+        gap: 13px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: #fafbff;
+      }
+      .num {
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #eeebff;
+        color: var(--primary);
+        font-weight: 800;
+      }
+      .status {
+        display: none;
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 12px;
+        background: var(--success-bg);
+        color: var(--success);
+        border: 1px solid #abefc6;
+      }
+      .status.show {
+        display: block;
+      }
+      .confirmation {
+        display: none;
+      }
+      .confirmation.show {
+        display: block;
+      }
+      .purchase.show {
+        display: none;
+      }
+      .receipt {
+        background: #f8f9fc;
+        border: 1px dashed #cfd4dc;
+        border-radius: 14px;
+        padding: 18px;
+        margin: 20px 0;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 8px 0;
+      }
+      .row span:last-child {
+        font-weight: 750;
+        text-align: right;
+      }
+      .code {
+        display: inline-block;
+        margin-top: 4px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        background: #101828;
+        color: white;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.08em;
+      }
+      .config {
+        margin-top: 24px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+      }
+      .config label {
+        display: block;
+        font-weight: 750;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .config input {
+        width: 100%;
+        padding: 12px 13px;
+        border: 1px solid #d0d5dd;
+        border-radius: 10px;
+        font: inherit;
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 7px;
+        line-height: 1.5;
+      }
+      footer {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .wrap {
+          padding-top: 25px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">NPO Assessment • Demo Purchase</div>
 
-  <section class="hero">
-    <span class="eyebrow">QA / Test Environment</span>
-    <h1>Simulated purchase flow</h1>
-    <p>
-      This standalone page simulates the purchase platform. Click <strong>Complete Purchase</strong>
-      to generate a demo assessment access code. The confirmation screen then exposes the
-      <strong>Take Assessment</strong> button that redirects to your WordPress assessment flow.
-    </p>
-  </section>
+      <section class="hero">
+        <span class="eyebrow">QA / Test Environment</span>
+        <h1>Simulated purchase flow</h1>
+        <p>
+          This standalone page simulates the purchase platform. Click
+          <strong>Complete Purchase</strong>
+          using the assessment access code selected above. The confirmation
+          screen then exposes the
+          <strong>Take Assessment</strong> button that redirects to your
+          WordPress assessment flow.
+        </p>
+      </section>
 
-  <div class="grid">
-    <section class="card purchase" id="purchaseCard">
-      <div class="product-title">Self-Assessment Access</div>
-      <div class="muted">Demo product for end-to-end QA</div>
-      <div class="price">$49.00</div>
-      <ul>
-        <li>One assessment access entitlement</li>
-        <li>Demo single-use access code</li>
-        <li>Redirect to the WordPress assessment flow</li>
-      </ul>
+      <div class="grid">
+        <section class="card purchase" id="purchaseCard">
+          <div class="product-title">Self-Assessment Access</div>
+          <div class="muted">Demo product for end-to-end QA</div>
+          <div class="price">$49.00</div>
+          <ul>
+            <li>One assessment access entitlement</li>
+            <li>Demo single-use access code</li>
+            <li>Redirect to the WordPress assessment flow</li>
+          </ul>
 
-      <button id="purchaseBtn" type="button">Complete Purchase</button>
-      <div class="status" id="processing">Processing simulated purchase…</div>
-    </section>
+          <div style="margin: 22px 0 14px">
+            <label
+              for="purchaseCode"
+              style="
+                display: block;
+                font-weight: 750;
+                font-size: 13px;
+                margin-bottom: 8px;
+              "
+            >
+              Assessment Access Code
+            </label>
+            <input
+              id="purchaseCode"
+              type="text"
+              value="TEST-CODE-001"
+              placeholder="Enter the access code to use"
+              autocomplete="off"
+              spellcheck="false"
+              style="
+                width: 100%;
+                padding: 13px;
+                border: 1px solid #d0d5dd;
+                border-radius: 10px;
+                font: inherit;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+              "
+            />
+            <div class="hint">
+              Choose the exact code you want this simulated purchase to pass to
+              the assessment flow. This lets us test specific codes from the NPO
+              Assessment Access plugin, including valid, used, invalid, and
+              other test cases.
+            </div>
+          </div>
 
-    <aside class="card">
-      <h2 style="margin-top:0">Test flow</h2>
-      <div class="steps">
-        <div class="step"><div class="num">1</div><div><strong>Purchase</strong><br><span class="muted">Simulate successful checkout.</span></div></div>
-        <div class="step"><div class="num">2</div><div><strong>Access code</strong><br><span class="muted">A unique demo code is generated.</span></div></div>
-        <div class="step"><div class="num">3</div><div><strong>Take Assessment</strong><br><span class="muted">Redirect to WordPress with the code.</span></div></div>
-        <div class="step"><div class="num">4</div><div><strong>Continue QA</strong><br><span class="muted">Test login, redemption, assessment and results.</span></div></div>
+          <button id="purchaseBtn" type="button">Complete Purchase</button>
+          <div class="status" id="processing">
+            Processing simulated purchase…
+          </div>
+        </section>
+
+        <aside class="card">
+          <h2 style="margin-top: 0">Test flow</h2>
+          <div class="steps">
+            <div class="step">
+              <div class="num">1</div>
+              <div>
+                <strong>Purchase</strong><br /><span class="muted"
+                  >Simulate successful checkout.</span
+                >
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">2</div>
+              <div>
+                <strong>Access code</strong><br /><span class="muted"
+                  >Choose the exact code to send with the purchase.</span
+                >
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">3</div>
+              <div>
+                <strong>Take Assessment</strong><br /><span class="muted"
+                  >Redirect to WordPress with the code.</span
+                >
+              </div>
+            </div>
+            <div class="step">
+              <div class="num">4</div>
+              <div>
+                <strong>Continue QA</strong><br /><span class="muted"
+                  >Test login, redemption, assessment and results.</span
+                >
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
-    </aside>
-  </div>
 
-  <section class="card confirmation" id="confirmation" style="margin-top:24px">
-    <span class="eyebrow">Purchase successful</span>
-    <h2 style="font-size:32px;margin:15px 0 8px">Your assessment is ready</h2>
-    <p class="muted">
-      The simulated purchase has completed. In the real purchase platform, this is where
-      the customer would receive their assessment CTA/link.
-    </p>
+      <section
+        class="card confirmation"
+        id="confirmation"
+        style="margin-top: 24px"
+      >
+        <span class="eyebrow">Purchase successful</span>
+        <h2 style="font-size: 32px; margin: 15px 0 8px">
+          Your assessment is ready
+        </h2>
+        <p class="muted">
+          The simulated purchase has completed. In the real purchase platform,
+          this is where the customer would receive their assessment CTA/link.
+        </p>
 
-    <div class="receipt">
-      <div class="row"><span>Order</span><span id="orderId"></span></div>
-      <div class="row"><span>Product</span><span>Self-Assessment Access</span></div>
-      <div class="row"><span>Status</span><span style="color:var(--success)">Paid</span></div>
-      <div class="row"><span>Assessment code</span><span class="code" id="accessCode"></span></div>
+        <div class="receipt">
+          <div class="row"><span>Order</span><span id="orderId"></span></div>
+          <div class="row">
+            <span>Product</span><span>Self-Assessment Access</span>
+          </div>
+          <div class="row">
+            <span>Status</span><span style="color: var(--success)">Paid</span>
+          </div>
+          <div class="row">
+            <span>Assessment code</span
+            ><span class="code" id="accessCode"></span>
+          </div>
+        </div>
+
+        <a class="button" id="assessmentBtn" href="#">Take Assessment</a>
+      </section>
+
+      <section class="config">
+        <label for="assessmentUrl">WordPress assessment URL</label>
+        <input
+          id="assessmentUrl"
+          value="http://223.30.218.166:8083/aloha/assessment-access/"
+          spellcheck="false"
+        />
+        <div class="hint">
+          The demo appends <code>?code=DEMO-CODE</code> to this URL. Change this
+          field if your development site's assessment/access URL is different.
+          The planned project flow uses a URL code parameter; the current access
+          plugin inspection notes that this URL-based flow still needs to be
+          implemented before it can be used end-to-end.
+        </div>
+      </section>
+
+      <footer>
+        Demo only — no real payment is processed and no real order is created.
+      </footer>
     </div>
 
-    <a class="button" id="assessmentBtn" href="#">Take Assessment</a>
-  </section>
+    <script>
+      (function () {
+        const purchaseBtn = document.getElementById("purchaseBtn");
+        const purchaseCode = document.getElementById("purchaseCode");
+        const processing = document.getElementById("processing");
+        const purchaseCard = document.getElementById("purchaseCard");
+        const confirmation = document.getElementById("confirmation");
+        const assessmentBtn = document.getElementById("assessmentBtn");
+        const assessmentUrl = document.getElementById("assessmentUrl");
+        const accessCodeEl = document.getElementById("accessCode");
+        const orderIdEl = document.getElementById("orderId");
 
-  <section class="config">
-    <label for="assessmentUrl">WordPress assessment URL</label>
-    <input id="assessmentUrl"
-           value="http://223.30.218.166:8083/aloha/assessment-access/"
-           spellcheck="false">
-    <div class="hint">
-      The demo appends <code>?code=DEMO-CODE</code> to this URL. Change this field if your
-      development site's assessment/access URL is different. The planned project flow uses
-      a URL code parameter; the current access plugin inspection notes that this URL-based
-      flow still needs to be implemented before it can be used end-to-end.
-    </div>
-  </section>
+        function getSelectedCode() {
+          return purchaseCode.value.trim().toUpperCase();
+        }
 
-  <footer>
-    Demo only — no real payment is processed and no real order is created.
-  </footer>
-</div>
+        function makeOrderId() {
+          return "DEMO-" + Date.now().toString(36).toUpperCase();
+        }
 
-<script>
-(function () {
-  const purchaseBtn = document.getElementById('purchaseBtn');
-  const processing = document.getElementById('processing');
-  const purchaseCard = document.getElementById('purchaseCard');
-  const confirmation = document.getElementById('confirmation');
-  const assessmentBtn = document.getElementById('assessmentBtn');
-  const assessmentUrl = document.getElementById('assessmentUrl');
-  const accessCodeEl = document.getElementById('accessCode');
-  const orderIdEl = document.getElementById('orderId');
+        function buildAssessmentUrl(baseUrl, code) {
+          try {
+            const url = new URL(baseUrl);
+            url.searchParams.set("code", code);
+            return url.toString();
+          } catch (e) {
+            return (
+              baseUrl.replace(/[?&]code=[^&]*/i, "").replace(/[?&]$/, "") +
+              (baseUrl.includes("?") ? "&" : "?") +
+              "code=" +
+              encodeURIComponent(code)
+            );
+          }
+        }
 
-  function makeCode() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let value = '';
-    for (let i = 0; i < 12; i++) {
-      if (i === 4 || i === 8) value += '-';
-      value += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return value;
-  }
+        purchaseBtn.addEventListener("click", function () {
+          const code = getSelectedCode();
 
-  function makeOrderId() {
-    return 'DEMO-' + Date.now().toString(36).toUpperCase();
-  }
+          if (!code) {
+            purchaseCode.focus();
+            purchaseCode.style.borderColor = "#b42318";
+            return;
+          }
 
-  function buildAssessmentUrl(baseUrl, code) {
-    try {
-      const url = new URL(baseUrl);
-      url.searchParams.set('code', code);
-      return url.toString();
-    } catch (e) {
-      return baseUrl.replace(/[?&]code=[^&]*/i, '').replace(/[?&]$/, '') +
-             (baseUrl.includes('?') ? '&' : '?') + 'code=' + encodeURIComponent(code);
-    }
-  }
+          purchaseCode.style.borderColor = "#d0d5dd";
+          purchaseBtn.disabled = true;
+          processing.classList.add("show");
 
-  purchaseBtn.addEventListener('click', function () {
-    purchaseBtn.disabled = true;
-    processing.classList.add('show');
+          setTimeout(function () {
+            const orderId = makeOrderId();
 
-    setTimeout(function () {
-      const code = makeCode();
-      const orderId = makeOrderId();
+            accessCodeEl.textContent = code;
+            orderIdEl.textContent = orderId;
+            assessmentBtn.href = buildAssessmentUrl(
+              assessmentUrl.value.trim(),
+              code,
+            );
 
-      accessCodeEl.textContent = code;
-      orderIdEl.textContent = orderId;
-      assessmentBtn.href = buildAssessmentUrl(assessmentUrl.value.trim(), code);
+            processing.classList.remove("show");
+            purchaseCard.classList.add("purchase");
+            purchaseCard.style.display = "none";
+            confirmation.classList.add("show");
 
-      processing.classList.remove('show');
-      purchaseCard.classList.add('purchase');
-      purchaseCard.style.display = 'none';
-      confirmation.classList.add('show');
+            // Useful for QA/debugging in the browser console.
+            console.log("Demo purchase:", {
+              orderId: orderId,
+              accessCode: code,
+              assessmentUrl: assessmentBtn.href,
+            });
+          }, 900);
+        });
 
-      // Useful for QA/debugging in the browser console.
-      console.log('Demo purchase:', {
-        orderId: orderId,
-        accessCode: code,
-        assessmentUrl: assessmentBtn.href
-      });
-    }, 900);
-  });
+        purchaseCode.addEventListener("input", function () {
+          purchaseCode.style.borderColor = "#d0d5dd";
+          purchaseCode.value = purchaseCode.value.toUpperCase();
+        });
 
-  assessmentUrl.addEventListener('input', function () {
-    const code = accessCodeEl.textContent.trim();
-    if (code) assessmentBtn.href = buildAssessmentUrl(assessmentUrl.value.trim(), code);
-  });
-})();
-</script>
-</body>
+        purchaseCode.addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            purchaseBtn.click();
+          }
+        });
+
+        assessmentUrl.addEventListener("input", function () {
+          const code = accessCodeEl.textContent.trim();
+          if (code)
+            assessmentBtn.href = buildAssessmentUrl(
+              assessmentUrl.value.trim(),
+              code,
+            );
+        });
+      })();
+    </script>
+  </body>
 </html>
